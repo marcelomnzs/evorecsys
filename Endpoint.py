@@ -1,7 +1,6 @@
 # This implemented model of EvoRecSys has been designed as a web-based system. This file, which is a minimal endpoint,
 # controls the full workflow of the system.
 
-
 # All necessary libraries and imports from other files.
 from src.collaborativefiltering.CollaborativeFiltering import CollaborativeFiltering
 from src.geneticalgorithm.GeneticAlgorithm import GeneticAlgorithm
@@ -802,7 +801,6 @@ class Finish(tornado.web.RequestHandler):
 
     def post(self):
 
-        self.clear_all_cookies("/")
         self.clear_all_cookies()
         self.redirect("/")
         self.on_connection_close()
@@ -872,8 +870,6 @@ def make_app():
     app = tornado.web.Application(handlers, **settings, autoreload=True)
 
     return app
-
-
 # We deploy our EvoRecSys web app. It uses port 8081 to receive requests. The IP is localhost.
 if __name__ == '__main__':
 

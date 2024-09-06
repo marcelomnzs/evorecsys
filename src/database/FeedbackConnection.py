@@ -22,7 +22,7 @@ class FeedbackConnection(Connection):
                                                  database=self.DATA_BASE)
         unique_id = self.__generate_id()
         cursor = self.connector.cursor()
-        sql_sentence = ("INSERT INTO evo_rec_sys_v2.user_feedback (id,no_response_counter,meal_0,pa_0,is_favorite_0,"
+        sql_sentence = ("INSERT INTO evorecsys.user_feedback (id,no_response_counter,meal_0,pa_0,is_favorite_0,"
                         "meal_1,pa_1,is_favorite_1,meal_2,pa_2,is_favorite_2) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"
                         "%s);")
         sql_values = (unique_id, no_response_counter, rec1_meal, rec1_exercise, rec1_favorite, rec2_meal, rec2_exercise,
@@ -38,7 +38,7 @@ class FeedbackConnection(Connection):
                             surprising, reliability, healthy):
         unique_id = self.__generate_id()
         cursor = self.connector.cursor()
-        sql_sentence = ("INSERT INTO evo_rec_sys_v2.user_feedback (id,no_response_counter,meal_0,pa_0,is_favorite_0,"
+        sql_sentence = ("INSERT INTO evorecsys.user_feedback (id,no_response_counter,meal_0,pa_0,is_favorite_0,"
                         "meal_1,pa_1,is_favorite_1,meal_2,pa_2,is_favorite_2,diversity,surprising,reliability,healthy) "
                         "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);")
         sql_values = (unique_id, no_response_counter, rec1_meal, rec1_exercise, rec1_favorite, rec2_meal, rec2_exercise,
@@ -62,7 +62,7 @@ class FeedbackConnection(Connection):
             letters_and_digits = string.ascii_letters + string.digits
             unique_id = ''.join(random.choice(letters_and_digits) for _ in range(length))
             cursor = self.connector.cursor()
-            sql_sentence = ("SELECT * FROM evo_rec_sys_v2.user_feedback WHERE id=" + "'" + unique_id + "';")
+            sql_sentence = ("SELECT * FROM evorecsys.user_feedback WHERE id=" + "'" + unique_id + "';")
             cursor.execute(sql_sentence)
             id_data = cursor.fetchall()
 

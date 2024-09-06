@@ -32,7 +32,7 @@ class ItemsConnection(Connection):
         main_items = []
         side_items = []
 
-        cursor.execute('SELECT * FROM evo_rec_sys_v2.food_vegetable;')
+        cursor.execute('SELECT * FROM evorecsys.food_vegetable;')
 
         for food in cursor:
 
@@ -42,7 +42,7 @@ class ItemsConnection(Connection):
 
         if len(selected_food_items) <= 0:
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.food_pasta WHERE is_main =' + self.MAIN_VALUE +
+            cursor.execute('SELECT * FROM evorecsys.food_pasta WHERE is_main =' + self.MAIN_VALUE +
                            ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
             for food in cursor:
@@ -51,7 +51,7 @@ class ItemsConnection(Connection):
                          food[10], food[11], food[12], food[13], food[14], food[15], food[17])
                 main_items.append(f)
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.food_nut WHERE is_main =' + self.SIDE_VALUE +
+            cursor.execute('SELECT * FROM evorecsys.food_nut WHERE is_main =' + self.SIDE_VALUE +
                            ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
             for food in cursor:
@@ -68,7 +68,7 @@ class ItemsConnection(Connection):
 
                     continue
 
-                cursor.execute('SELECT * FROM evo_rec_sys_v2.food_' + selected_food_item + ' WHERE is_main =' +
+                cursor.execute('SELECT * FROM evorecsys.food_' + selected_food_item + ' WHERE is_main =' +
                                self.MAIN_VALUE + ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
                 for food in cursor:
@@ -77,7 +77,7 @@ class ItemsConnection(Connection):
                              food[9], food[10], food[11], food[12], food[13], food[14], food[15], food[17])
                     main_items.append(f)
 
-                cursor.execute('SELECT * FROM evo_rec_sys_v2.food_' + selected_food_item + ' WHERE is_main =' +
+                cursor.execute('SELECT * FROM evorecsys.food_' + selected_food_item + ' WHERE is_main =' +
                                self.SIDE_VALUE + ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
                 for food in cursor:
@@ -106,7 +106,7 @@ class ItemsConnection(Connection):
 
         if len(selected_pa_items) <= 0:
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.exercise_walking;')
+            cursor.execute('SELECT * FROM evorecsys.exercise_walking;')
 
             for exercise_item in cursor:
 
@@ -118,7 +118,7 @@ class ItemsConnection(Connection):
 
             for activity in selected_pa_items:
 
-                cursor.execute('SELECT * FROM evo_rec_sys_v2.exercise_' + activity + ' WHERE intensity =' +
+                cursor.execute('SELECT * FROM evorecsys.exercise_' + activity + ' WHERE intensity =' +
                                str(intensity)+';')
 
                 for pa_item in cursor:
@@ -128,7 +128,7 @@ class ItemsConnection(Connection):
 
             if gaining_muscle_mass is True:
 
-                cursor.execute('SELECT * FROM evo_rec_sys_v2.exercise_conditioning WHERE id IN (3,4,5,7,8,11);')
+                cursor.execute('SELECT * FROM evorecsys.exercise_conditioning WHERE id IN (3,4,5,7,8,11);')
 
                 for pa_item in cursor:
 
@@ -150,7 +150,7 @@ class ItemsConnection(Connection):
         genre = str(int(user_genre))
         age = str(user_age)
 
-        cursor.execute('SELECT * FROM evo_rec_sys_v2.restrictions_food WHERE genre ='+"'"+genre+"'"+' AND '+"'"+age+"'"
+        cursor.execute('SELECT * FROM evorecsys.restrictions_food WHERE genre ='+"'"+genre+"'"+' AND '+"'"+age+"'"
                        +' BETWEEN inferior_limit AND superior_limit;')
 
         healthy_restrictions = None
@@ -179,7 +179,7 @@ class ItemsConnection(Connection):
 
         for food_item in food_items_names:
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.food_' + food_item + ' WHERE is_main =' +
+            cursor.execute('SELECT * FROM evorecsys.food_' + food_item + ' WHERE is_main =' +
                            self.MAIN_VALUE + ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
             for food in cursor:
@@ -188,7 +188,7 @@ class ItemsConnection(Connection):
                          food[9], food[10], food[11], food[12], food[13], food[14], food[15], food[17])
                 main_items.append(f)
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.food_' + food_item + ' WHERE is_main =' +
+            cursor.execute('SELECT * FROM evorecsys.food_' + food_item + ' WHERE is_main =' +
                            self.SIDE_VALUE + ' AND time_lunch = ' + self.LUNCH_VALUE + ';')
 
             for food in cursor:
@@ -215,7 +215,7 @@ class ItemsConnection(Connection):
 
         for activity in pa_items_names:
 
-            cursor.execute('SELECT * FROM evo_rec_sys_v2.exercise_' + activity + ';')
+            cursor.execute('SELECT * FROM evorecsys.exercise_' + activity + ';')
 
             for pa_item in cursor:
 
