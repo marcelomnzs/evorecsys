@@ -2,7 +2,6 @@
 # controls the full workflow of the system.
 
 # All necessary libraries and imports from other files.
-from src.collaborativefiltering.CollaborativeFiltering import CollaborativeFiltering
 from src.geneticalgorithm.GeneticAlgorithm import GeneticAlgorithm
 from src.database.FeedbackConnection import FeedbackConnection
 import tornado.httpserver
@@ -489,15 +488,6 @@ class ProcessData(tornado.web.RequestHandler):
                      float(self.get_cookie("goal")),       #29
                      ]
 
-        # This object retrieves the most similar user data to the data of the current user by nearest-neighbour
-        # Collaborative Filtering strategy.
-        cf = CollaborativeFiltering()
-        similar_user_data = cf.get_similar_user_data_with_single_vector(user_data)
-
-        if similar_user_data == -1:
-
-            similar_user_data = user_data
-
         not_answered_counter = 0
 
         for index in range(0, len(user_data)):
@@ -519,9 +509,8 @@ class ProcessData(tornado.web.RequestHandler):
 
         self.set_cookie("unanswered", str(not_answered_counter), expires_days=1, httponly=True)
 
-        # This object creates an instance of a Genetic Algorithm and both user_data and most similar user data are the
-        # main parameters of it.
-        ga = GeneticAlgorithm(user_data, similar_user_data)
+        # This object creates an instance of a Genetic Algorithm and both user_data and most similar user data is the main parameter of it.
+        ga = GeneticAlgorithm(user_data)
         suggested_bundles = ga.execute_genetic_algorithm()
 
         me0main_ = suggested_bundles[0].meal.main_food_item.name

@@ -11,15 +11,14 @@ from src.database.ItemsConnection import ItemsConnection
 import random
 import copy
 
-
-# This class represents a Genetic Algorithm. It uses the information of the current user and the most similar user data
+# This class represents a Genetic Algorithm. It uses the information of the current user
 # obtained by the nearest-neighbour collaborative filtering step.
 class GeneticAlgorithm:
 
     NUMBER_OF_MEALS_PER_DAY = 3
 
     #Constructor
-    def __init__(self, user_data, most_similar_user_data):
+    def __init__(self, user_data):
 
         self.number_of_individuals = 250
         self.number_of_generations = 150
@@ -31,7 +30,7 @@ class GeneticAlgorithm:
         self.restrictions = []
         self.mutation_dictionary = {}
 
-        self.__configure_data(user_data, most_similar_user_data)
+        self.__configure_data(user_data)
 
     # This method executes the main steps of the Genetic Algorithm.
     def execute_genetic_algorithm(self):
@@ -61,7 +60,7 @@ class GeneticAlgorithm:
         return population.best_individual.phenotype
 
     # This method utilises the information given to configure all the elements needed during the evolutionary execution.
-    def __configure_data(self, user_data, most_similar_user_data):
+    def __configure_data(self, user_data):
 
         self.physical_data = PhysicalData(user_data[0], user_data[1], user_data[2], user_data[3], user_data[4],
                                           user_data[29])
@@ -76,7 +75,6 @@ class GeneticAlgorithm:
         high_evaluated_activities = self.pa_preferences.get_higher_evaluated_activities()
         self.__get_items()
         self.__initialise_restrictions(high_evaluated_food_types, high_evaluated_activities)
-        self.__get_high_evaluated_preferences_of_similar_user(most_similar_user_data)
 
     # This method retrieves both food and physical activity data according to the preferences of the current user.
     def __get_items(self):
@@ -165,63 +163,6 @@ class GeneticAlgorithm:
             user_preferences_restriction = UserPreferencesRestriction(high_evaluated_food_types,
                                                                       high_evaluated_activity_types)
             self.restrictions.append(user_preferences_restriction)
-
-    def __get_high_evaluated_preferences_of_similar_user(self, similar_user_data):
-
-        similar_food_preferences = FoodPreferenceData(similar_user_data[5], similar_user_data[6], similar_user_data[7],
-                                                      similar_user_data[8], similar_user_data[9],
-                                                      similar_user_data[10], similar_user_data[11],
-                                                      similar_user_data[12], similar_user_data[13],
-                                                      similar_user_data[14], similar_user_data[15],
-                                                      similar_user_data[16], similar_user_data[17],
-                                                      similar_user_data[18])
-        similar_high_evaluated_food_types = similar_food_preferences.get_higher_evaluated_types()
-        similar_pa_preferences = PAPreferenceData(similar_user_data[19], similar_user_data[20],similar_user_data[21],
-                                                  similar_user_data[22], similar_user_data[23], similar_user_data[24],
-                                                  similar_user_data[25], similar_user_data[26], similar_user_data[27],
-                                                  similar_user_data[28])
-        similar_high_evaluated_pas = similar_pa_preferences.get_higher_evaluated_activities()
-        similar_food = similar_high_evaluated_food_types["first"]
-        self.__get_food_indexes(similar_food, "main")
-        self.__get_food_indexes(similar_food, "side")
-        similar_pas = similar_high_evaluated_pas["first"]
-        self.__get_pas_indexes(similar_pas)
-
-    def __get_food_indexes(self, similar_food_types, main_side):
-
-        for similar in similar_food_types:
-
-            location_list = []
-            index = 0
-
-            for main_item in self.food_items.get(main_side):
-
-                if main_item.category == similar:
-                    location = (main_side, index)
-                    location_list.append(location)
-
-                index += 1
-
-            if len(location_list) != 0:
-
-                self.mutation_dictionary[similar] = location_list
-
-    def __get_pas_indexes(self, similar_pas):
-
-        for similar in similar_pas:
-
-            location_list = []
-            index = 0
-
-            for pa in self.pa_items:
-
-                if pa.category == similar:
-                    location_list.append(index)
-
-                index += 1
-
-            if len(location_list) != 0:
-                self.mutation_dictionary[similar] = location_list
 
     # This method prints on console the recommendations built by the Genetic Algorithms.
     def __print_phenotype(self, phenotype):

@@ -11,7 +11,7 @@ class Population:
 
     CROSSOVER_PROBABILITY = 0.6
     MUTATION_PROBABILITY = 0.1
-    BUNDLE_CROSSOVER_PROBABILITY = BUNDLE_MUTATION_PROBABILITY = 0.90
+    BUNDLE_CROSSOVER_PROBABILITY = 0.90
     MEAL_PA_PROBABILITY = 0.75
     MAIN_SIDE_PROBABILITY = 0.25
     MANDATORY_SIDE = "vegetable"
@@ -168,57 +168,19 @@ class Population:
     def __execute_mutation(self):
 
         for index in range(0, self.number_of_individuals):
-
+            
+            # Generates a random probability
             mutation_probability = random.uniform(0.0, 1.0)
 
             if mutation_probability < self.MUTATION_PROBABILITY:
-                mutated_individual_phenotype = self.intermediate_population[index].phenotype
-                self.__execute_random_swap_of_items(mutated_individual_phenotype)
+                newIndividual = Individual(self.food_items, self.pa_items)
+                vegetableIndexes = self.__get_vegetable_indexes()
+                newIndividual.create_phenotype(vegetableIndexes, self.physical_data)
 
-    # This method is called by the mutation operator.
-    def __execute_random_swap_of_items(self, mutated_phenotype, is_cf_individual=False):
+                
 
-        if is_cf_individual:
-
-            mutation_prob = 1.0
-
-        else:
-
-            mutation_prob = self.BUNDLE_MUTATION_PROBABILITY
-
-        for bundle_index in range(0, len(mutated_phenotype)):
-
-            bundle_probability = random.uniform(0.0, 1.0)
-
-            if bundle_probability <= mutation_prob:
-
-                item_list = list(self.mutation_dictionary.keys())
-                random_type_index = random.randrange(len(item_list))
-                random_type = item_list[random_type_index]
-                random_location_list = self.mutation_dictionary.get(random_type)
-
-                if isinstance(random_location_list[0], int):
-
-                    random_index = random.randrange(len(random_location_list))
-                    mutated_pa = self.pa_items[random_location_list[random_index]]
-                    mutated_phenotype[bundle_index].mutate_pa_item(mutated_pa,
-                                                                   self.physical_data.maximum_number_of_calories,
-                                                                   self.physical_data.weight, self.physical_data.goal)
-
-                else:
-
-                    random_location_index = random.randrange(len(random_location_list))
-                    random_location = random_location_list[random_location_index]
-                    mutated_food_item = self.food_items.get(random_location[0])[random_location[1]]
-
-                    if self.MAIN_REFERENCE == random_location[0]:
-
-                        mutated_phenotype[bundle_index].mutate_main_item(mutated_food_item)
-
-                    else:
-
-                        random_index = random.randrange(len(mutated_phenotype[bundle_index].meal.side_food_items_list))
-                        mutated_phenotype[bundle_index].mutate_side_item(mutated_food_item, random_index)
+                # Change the selected individual for the new generated individual
+                self.intermediate_population[index] = newIndividual
 
     # This method is called by the crossover operator.
     def __execute_random_combination_of_items(self, child_phenotype, receiver, heritage):
